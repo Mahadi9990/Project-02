@@ -1,6 +1,12 @@
 import express from 'express'
 import mongoose from 'mongoose'
-mongoose.connect()
+import dotenv from 'dotenv';
+dotenv.config();
+mongoose.connect(process.env.MONGO).then(()=>{
+    console.log("connect with mongoose")
+}).catch((err)=>{
+    console.log("cannot connect with mongoose")
+})
 const app =express()
 
 app.listen(3000,()=>{

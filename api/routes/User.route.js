@@ -3,6 +3,6 @@ import {test} from '../contoraler/user.contoraler.js'
 
 const route =express.Router()
 
-route.use('/list',test)
+route.use('/test',test)
 
 export default route;

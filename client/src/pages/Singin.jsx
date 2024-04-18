@@ -1,19 +1,21 @@
 import React from 'react'
 import { useState } from 'react';
 import {Link,useNavigate} from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import { singInStart,singInSuccess,singInFailure } from '../redux/user/userSlice';
 
 export default function Singin() {
   const [fromData, setfromData] = useState({});
-  const [loading, setloading] = useState(false);
-  const [error, seterror] = useState(null);
+  const {loading,error} =useSelector((state)=>state.user)
   const navigate =useNavigate()
+  const dispatch =useDispatch();
   const handleClick =(e)=>{
     setfromData({...fromData,[e.target.id]:e.target.value})
   }
   const handleSubmit=async(e)=>{
     e.preventDefault()
     try {
-      setloading(true)
+      dispatch(singInStart())
       const res =await fetch('/api/user/sing-in',{
         method:"POST",
         headers:{
@@ -23,16 +25,13 @@ export default function Singin() {
       })
       const data =await res.json()
       if(data.success === false){
-        setloading(false)
-        seterror(data.message)
+        dispatch(singInFailure(data.message))
         return
       }
-      setloading(false)
-      seterror(null)
+      dispatch(singInSuccess(data))
       navigate('/profile')
     } catch (error) {
-      setloading(false)
-      seterror(error.message)
+      dispatch(singInFailure(error.message))
     }
   }
   return (

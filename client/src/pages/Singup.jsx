@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import {Link,useNavigate} from 'react-router-dom'
+import Outh from '../components/Outh';
 
 export default function Singup() {
   const [fromData, setfromData] = useState({});
@@ -45,6 +46,7 @@ export default function Singup() {
           <button disabled={loading} className='uppercase rounded-lg bg-slate-500 p-3 font-semibold text-white hover:opacity-90 w-[500px]'>
             {loading?'Loading...':'singup'}
             </button>
+            <Outh/>
             <h1 className='font-semibold'>Have an acount <Link className='hover:underline text-blue-600' to={'/sing-in'}>Singin</Link></h1>
         </form>
         {error && <p className='text-red-500 text-center'>{error}</p>}

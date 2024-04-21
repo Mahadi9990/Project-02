@@ -1,4 +1,4 @@
-import {createSlice, current} from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState ={
     currentUser:null,
@@ -15,15 +15,14 @@ const userSlice =createSlice({
         },
         singInSuccess:(state,action)=>{
             state.currentUser =action.payload;
-            state.loading =false;
-            state.error =null;
+            state.loading=false;
+            state.error=null;
         },
         singInFailure:(state,action)=>{
-            state.error =action.payload;
-            state.loading =false;
+            state.loading=false;
         }
     }
 })
 
-export const {singInStart,singInSuccess,singInFailure} =userSlice.actions;
+export const {singInStart,singInFailure,singInSuccess} =userSlice.actions;
 export default userSlice.reducer;

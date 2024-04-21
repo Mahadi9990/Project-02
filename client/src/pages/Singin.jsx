@@ -2,13 +2,13 @@ import React from 'react'
 import { useState } from 'react';
 import {Link,useNavigate} from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import { singInStart,singInSuccess,singInFailure } from '../redux/user/userSlice';
-
+import { singInFailure, singInStart, singInSuccess } from '../redux/user/userSlice';
+import Outh from '../components/Outh';
 export default function Singin() {
   const [fromData, setfromData] = useState({});
-  const {loading,error} =useSelector((state)=>state.user)
+  const {error,loading} =useSelector((state)=>state.user)
   const navigate =useNavigate()
-  const dispatch =useDispatch();
+  const dispatch =useDispatch()
   const handleClick =(e)=>{
     setfromData({...fromData,[e.target.id]:e.target.value})
   }
@@ -43,6 +43,7 @@ export default function Singin() {
           <button disabled={loading} className='uppercase rounded-lg bg-slate-500 p-3 font-semibold text-white hover:opacity-90 w-[500px]'>
             {loading?'Loading...':'singin'}
             </button>
+            <Outh/>
             <h1 className='font-semibold'>Dont Have an acount <Link className='hover:underline text-blue-600' to={'/sing-up'}>Singup</Link></h1>
         </form>
         {error && <p className='text-red-500 text-center'>{error}</p>}

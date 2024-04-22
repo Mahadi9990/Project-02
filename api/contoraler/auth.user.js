@@ -33,6 +33,9 @@ export const singin =async(req,res,next)=>{
     }
 }
 
+
+
+
 export const google =async(req,res,next)=>{
     try {
         const user =await User.findOne({email:req.body.email})
@@ -47,7 +50,7 @@ export const google =async(req,res,next)=>{
             const generatedPassword =Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8)
             const hashPassword =bcryptjs.hashSync(generatedPassword,10)
             const newUser =new User({
-                userName:req.body.name.toLowerCase + Math.random().toString(36).slice(-4),
+                userName:req.body.name.split(" ").join("").toLowerCase()+Math.random().toString(36).slice(-4),
                 email:req.body.email,
                 password:hashPassword,
                 avater:req.body.photo
@@ -59,6 +62,8 @@ export const google =async(req,res,next)=>{
             .cookie("access_token",token,{httpOnly:true})
             .status(200)
             .json(rest)
+
+            
 
         }
     } catch (error) {

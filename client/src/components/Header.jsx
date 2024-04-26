@@ -15,20 +15,16 @@ export default function Header() {
             <FaSearch className='text-3xl'/>
         </form>
             <ul className='flex flex-row gap-3'>
-            <Link to={"/"}>
+            <Link to="/">
              <li>Home</li>
              </Link>
-             <Link to={"/about"}>
+             <Link to="/about">
              <li>About</li>
             </Link>
-            
-            <Link to={"/profile"}>
-            {
-              currentUser ?(
-                <img className='h-[30px] w-[30px] rounded-full object-cover' src={currentUser.avater} alt="" />
-              ):
-             <Link to={'/sing-in'}><li>Singin</li></Link>
-            }
+            <Link to="/profile">
+            {currentUser ? (<img src={currentUser.avatar} className='object-cover rounded-full w-7 h-7 '/>):
+          ( <li>Sing In</li>)  
+          }
             </Link>
             </ul>
         </div>

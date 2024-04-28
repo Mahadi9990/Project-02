@@ -4,7 +4,7 @@ import {useEffect, useRef,useState} from 'react'
 import {getStorage, uploadBytesResumable,ref, getDownloadURL} from 'firebase/storage'
 import {app} from '../firebase'
 import { useDispatch } from "react-redux"
-import { updateUserStart,updateUserSuccess,updateUserFailure } from "../redux/user/userSlice"
+import { updateUserStart,updateUserSuccess,updateUserFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess } from "../redux/user/userSlice"
 
 
 export default function Profile() {
@@ -18,8 +18,6 @@ export default function Profile() {
   const dispatch =useDispatch()
   const [updateSuccess, setupdateSuccess] = useState(false);
  
-  console.log(formData)
-
 
   useEffect(()=>{
     if(file){
@@ -77,6 +75,23 @@ export default function Profile() {
       dispatch(updateUserFailure(error.message));
     }
   }
+  const deleteUser =async()=>{
+    try {
+      dispatch(deleteUserStart())
+      const res =await fetch(`/api/example/delete/${currentUser._id}`,{
+        method:"DELETE"
+      })
+      const data =await res.json()
+      if(data.success === false){
+        dispatch(deleteUserFailure(data.message))
+        return;
+      }
+
+      dispatch(deleteUserSuccess(data))
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message))
+    }
+  }
   return (
     <div className='w-[500px] mx-auto'>  
      <h1 className='p-3 font-semibold text-3xl text-center'>Profile</h1>
@@ -120,7 +135,7 @@ export default function Profile() {
         </button>
      </form>
      <div className="flex justify-between items-center">
-      <span className='text-red-500 font-semibold'>Delete Account</span>
+      <span onClick={deleteUser}className='text-red-500 font-semibold'>Delete Account</span>
       <span className='text-red-500 font-semibold'>Sing Out</span>
      </div>
      <p className="text-red-500 font-semibold text-center">{error ? error :""}</p>

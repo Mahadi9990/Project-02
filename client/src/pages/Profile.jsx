@@ -4,7 +4,17 @@ import {useEffect, useRef,useState} from 'react'
 import {getStorage, uploadBytesResumable,ref, getDownloadURL} from 'firebase/storage'
 import {app} from '../firebase'
 import { useDispatch } from "react-redux"
-import { updateUserStart,updateUserSuccess,updateUserFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess } from "../redux/user/userSlice"
+import { 
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure, 
+  deleteUserFailure, 
+  deleteUserStart, 
+  deleteUserSuccess, 
+  singoutUserFailure, 
+  singoutUserStart, 
+  singoutUserSuccess 
+} from "../redux/user/userSlice"
 
 
 export default function Profile() {
@@ -92,6 +102,20 @@ export default function Profile() {
       dispatch(deleteUserFailure(error.message))
     }
   }
+  const singoutUser =async()=>{
+    try {
+      dispatch(singoutUserStart())
+      const res =await fetch('/api/example/singOut')
+      const data=await res.json()
+      if(data.success === false){
+        dispatch(singoutUserFailure(data.message))
+        return;
+      }
+      dispatch(singoutUserSuccess(data))
+    } catch (error) {
+      dispatch(singoutUserFailure(error.message))
+    }
+  }
   return (
     <div className='w-[500px] mx-auto'>  
      <h1 className='p-3 font-semibold text-3xl text-center'>Profile</h1>
@@ -135,8 +159,8 @@ export default function Profile() {
         </button>
      </form>
      <div className="flex justify-between items-center">
-      <span onClick={deleteUser}className='text-red-500 font-semibold'>Delete Account</span>
-      <span className='text-red-500 font-semibold'>Sing Out</span>
+      <span onClick={deleteUser} className='text-red-500 font-semibold'>Delete Account</span>
+      <span onClick={singoutUser} className='text-red-500 font-semibold'>Sing Out</span>
      </div>
      <p className="text-red-500 font-semibold text-center">{error ? error :""}</p>
      <p className="text-green-500 font-semibold text-center">{updateSuccess?'User update seccessflly':''}</p>

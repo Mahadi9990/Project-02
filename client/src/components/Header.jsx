@@ -22,7 +22,7 @@ export default function Header() {
              <li>About</li>
             </Link>
             <Link to="/profile">
-            {currentUser ? (<img src={currentUser.avatar} className='object-cover rounded-full w-7 h-7 '/>):
+            {currentUser ? (<img src={currentUser.avater} className='object-cover rounded-full w-7 h-7 '/>):
           ( <li>Sing In</li>)  
           }
             </Link>

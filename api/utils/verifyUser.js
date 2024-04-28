@@ -7,7 +7,7 @@ export const verifyToken=(req,res,next)=>{
 
     jwt.verify(token,process.env.JWTWEBTOKEN,(err,user)=>{
         if(err)return next(errorHandeler(402,'Forbiden'))
-        req.user =user
+        req.user =user;
         next()
     })
 

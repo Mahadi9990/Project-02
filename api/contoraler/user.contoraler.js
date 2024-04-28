@@ -2,12 +2,11 @@ import { errorHandeler } from "../utils/error.js"
 import bcrypejs from 'bcryptjs'
 import User from '../models/user.model.js'
 
-export const test =(req,res)=>{
-    res.send("hellow ")
-}
+
+
 export const update =async(req,res,next)=>{
     
-    if( req.user.id !== req.params.id) return next(errorHandeler(403,'You can update your won accouny'))
+    if( req.user.id !== req.params.id) return next(errorHandeler(403,'You can update your won account'))
     try {
         if(req.body.password){
             req.body.password =bcrypejs.hashSync(req.body.password,10)

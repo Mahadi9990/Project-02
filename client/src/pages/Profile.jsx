@@ -4,6 +4,7 @@ import {useEffect, useRef,useState} from 'react'
 import {getStorage, uploadBytesResumable,ref, getDownloadURL} from 'firebase/storage'
 import {app} from '../firebase'
 import { useDispatch } from "react-redux"
+import { Link } from "react-router-dom"
 import { 
   updateUserStart,
   updateUserSuccess,
@@ -157,6 +158,7 @@ export default function Profile() {
       <button disabled={loading} className='w-full bg-green-500 rounded-lg p-3 uppercase font-semibold'>
        {loading ?'Loading...':'Update'}
         </button>
+        <Link to='/createList' type="button" className="bg-slate-600 text-center text-white font-semibold p-3 w-full rounded-lg uppercase">Create List</Link>
      </form>
      <div className="flex justify-between items-center">
       <span onClick={deleteUser} className='text-red-500 font-semibold'>Delete Account</span>

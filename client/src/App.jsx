@@ -6,6 +6,7 @@ import Singup from './pages/Singup';
 import Profile from './pages/Profile';
 import Header from './components/Header';
 import PrivateRoute from './components/PrivateRoute';
+import CreateList from './pages/Createlist';
 export default function App() {
   return (
     <BrowserRouter>
@@ -15,6 +16,7 @@ export default function App() {
       <Route path="/about" element={<About/>}/>
       <Route  element={<PrivateRoute/>}>
         <Route path={"/profile"} element={<Profile/>}/>
+        <Route path={"/createList"} element={<CreateList/>}/>
       </Route>
       <Route path="/sing-in" element={<Singin/>}/>
       <Route path="/sing-up" element={<Singup/>}/>

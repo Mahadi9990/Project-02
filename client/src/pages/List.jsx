@@ -1,8 +1,9 @@
 import React from 'react'
 
-export default function createList() {
+export default function 
+() {
   return (
-    <>
+    <div>
       <h1 className='uppercase font-semibold text-center'>Create List</h1>
       <form action="" className='flex justify-around p-[50px]'>
         <div className="left">
@@ -83,11 +84,17 @@ export default function createList() {
             id='image'
           />
           <button 
+            type='button'
             className='hover:opacity-90 bg-green-500 text-white uppercase p-2 rounded-lg font-semibold'
           >Upload</button>
           </div>
+          <button 
+            className='uppercase rounded-lg bg-slate-500 mt-5 p-3 font-semibold text-white hover:opacity-90 w-[500px]'
+          >Submit</button>
+        
         </div>
+
       </form>
-    </>
+    </div>
   )
 }

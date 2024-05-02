@@ -20,8 +20,9 @@ app.listen(3000,()=>{
     console.log("Server is runing on port 3000")
 })
 
-app.use("/api/example",userRoute)
 app.use("/api/user",authRoute)
+app.use("/api/example",userRoute)
+app.use("/api/create",userRoute)
 
 
 app.use((err,req,res,next)=>{

@@ -1,7 +1,7 @@
 import { errorHandeler } from "../utils/error.js"
 import bcrypejs from 'bcryptjs'
 import User from '../models/user.model.js'
-import listing from "../models/list.model.js"
+import Listing from "../models/list.model.js"
 
 
 
@@ -54,9 +54,23 @@ export const singOut =async(req,res,next)=>{
 
 export  const list=async(req,res,next)=>{
     try {
-        const listings =await listing.create(req.body)
+        const listings =await Listing.create(req.body)
         res.status(201).json(listings)
     } catch (error) {
         next(error)
     }    
+}
+
+export const listing=async (req,res,next)=>{
+    if(req.user.id !== req.params.id) next(errorHandeler(201,'You can see your own listing'))
+        try {
+            const listings =await Listing.find({userRef:req.params.id})
+            res.status(200).json(listings)
+        } catch (error) {
+            next(error)
+        }
+    
+        
+    
+    
 }

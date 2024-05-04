@@ -19,7 +19,7 @@ import {
 
 
 export default function Profile() {
-
+  const [userListings, setuserListings] = useState([]);
   const {currentUser,error,loading}=useSelector((state)=>state.user)
   const fileRef = useRef(null);
   const [file, setfile] = useState(undefined);
@@ -28,6 +28,7 @@ export default function Profile() {
   const [filePerc, setfilePerc] = useState(0);
   const dispatch =useDispatch()
   const [updateSuccess, setupdateSuccess] = useState(false);
+  const [showListingError, setshowListingError] = useState(false);
  
 
   useEffect(()=>{
@@ -117,6 +118,21 @@ export default function Profile() {
       dispatch(singoutUserFailure(error.message))
     }
   }
+  const showMoreClick =async()=>{
+    try {
+      setshowListingError(false)
+      const res =await fetch(`/api/create/listing/${currentUser._id}`)
+      const data =await res.json()
+      if(data.success === false){
+        setshowListingError(true)
+        return;
+      }
+      setshowListingError(false)
+      setuserListings(data)
+    } catch (error) {
+      setshowListingError(true)
+    }
+  }
   return (
     <div className='w-[500px] mx-auto'>  
      <h1 className='p-3 font-semibold text-3xl text-center'>Profile</h1>
@@ -166,6 +182,19 @@ export default function Profile() {
      </div>
      <p className="text-red-500 font-semibold text-center">{error ? error :""}</p>
      <p className="text-green-500 font-semibold text-center">{updateSuccess?'User update seccessflly':''}</p>
+     <button type="button" onClick={showMoreClick} className='w-full bg-green-500 rounded-lg p-3 uppercase font-semibold'>
+       show more
+        </button>
+        {userListings && userListings.length > 0 && userListings.map((listings)=>
+          <div key={listings._id} className="flex flex-row justify-between gap-2 p-2">
+          <img className="w-[40px] h-[40px] rounded-sm" src={listings.image[0]} alt="" />
+          <p>{listings.title}</p>
+          <div className="flex flex-col">
+            <span>Delete</span>
+            <span>Edit</span>
+          </div>
+        </div>
+        )}
     </div>
   )
 }

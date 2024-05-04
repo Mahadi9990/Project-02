@@ -1,18 +1,37 @@
 import { useState } from 'react';
 import {getDownloadURL, getStorage, uploadBytesResumable,ref} from 'firebase/storage'
 import {app} from '../firebase'
+import {useSelector} from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 
 export default function () {
+  const navigate =useNavigate()
+  const {currentUser} =useSelector((state)=>state.user)
   const [files, setfiles] = useState([]);
+  const [loading, setloading] = useState(false);
+  const [error, seterror] = useState(false);
+  const [uploadings, setuploadings] = useState(false);
   const [formData, setformData] = useState({
-    image:[]
-  });
+    image:[],
+    title:'',
+    address:'',
+    discription:'',
+    type:'rent',
+    furnished:false,
+    parking:false,
+    offer:false,
+    bedRoom:0,
+    bathRoom:0,
+    market:0,
+    discount:0
+ });
   const [imageUploadError, setimageUploadError] = useState(false);
   const [uploading, setuploading] = useState(false);
-  console.log(formData)
+
   const handleImageUpload=(e)=>{
     if(files.length > 0 && files.length + formData.image.length < 3)
     {
+      setuploadings(true)
       setuploading(true)
       setimageUploadError(false)
       const promises=[]
@@ -24,9 +43,12 @@ export default function () {
         setformData({...formData,image:formData.image.concat(urls)})
         setimageUploadError(false)
         setuploading(false)
+        setuploadings(false)
+
       }).catch((err)=>{
         setimageUploadError("Image upload Failed (max 6mb)")
         setuploading(false)
+        setuploadings(false)
       })
     }else{
       setimageUploadError('You can only upload 2 Image')
@@ -61,10 +83,57 @@ export default function () {
         i !== index),
    })
   }
+  const handleChange =(e)=>{
+    if(e.target.id === 'rent' || e.target.id === 'sale'){
+      setformData({...formData,type:e.target.id})
+    }
+    if(e.target.id === 'offer' ||  e.target.id === 'furnished' || e.target.id === 'parking'){
+      setformData({
+        ...formData,[e.target.id]:e.target.checked
+      })
+    }
+    if(e.target.type === 'number' || e.target.type === 'text' || e.target.type === 'textarea'){
+      setformData({
+        ...formData,[e.target.id]:e.target.value
+      })
+    }
+    
+  }
+  const handleSubmit =async(e)=>{
+    e.preventDefault()
+    try {
+      if(formData.image.length < 1 ) return seterror('You must need to upload one image')
+      if(formData.market < formData.discount)return seterror('Discount prize need to less then Market prize')
+      setloading(true)
+      seterror(false)
+      const res =await fetch('/api/create/list',{
+        method:"POST",
+        headers:{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+          ...formData,userRef:currentUser._id
+        })
+      })
+      const data =await res.json()
+
+      if(data.success === false){
+        seterror(data.message)
+        setloading(false)
+        return;
+      }
+      seterror(false)
+      setloading(false)
+      navigate(`/listing/${data._id}`)
+    } catch (error) {
+      seterror(true)
+      setloading(false)
+    }
+  }
   return (
     <div>
       <h1 className='uppercase font-semibold text-center'>Create List</h1>
-      <form action="" className='flex justify-around p-[50px]'>
+      <form onSubmit={handleSubmit} className='flex justify-around p-[50px]'>
         <div className="left">
           <div className="flex flex-col gap-3">
           <input 
@@ -73,12 +142,16 @@ export default function () {
             placeholder='Title' 
             className='p-3 outline-none bg-slate-200 rounded-lg w-[500px]'
             required
+            value={formData.title}
+            onChange={handleChange}
           />
           <textarea 
             name="" 
             id="discription"
             className='p-3 outline-none bg-slate-200 rounded-lg w-[500px]'
             required
+            value={formData.discription}
+            onChange={handleChange}
           >
           </textarea>
           <input 
@@ -87,6 +160,8 @@ export default function () {
             placeholder='Address'
             className='p-3 outline-none bg-slate-200 rounded-lg w-[500px]'
             required
+            value={formData.address}
+            onChange={handleChange}
           />
           </div>
           <div className="radio flex flex-row gap-3 pt-3">
@@ -94,6 +169,8 @@ export default function () {
                 <input 
                   type="checkbox"
                   id='sale' 
+                  onChange={handleChange}
+                  checked={formData.type === 'sale'}
                 />
                 <label className="font-semibold">Sale</label>
               </div>
@@ -101,6 +178,8 @@ export default function () {
                 <input 
                   type="checkbox" 
                   id='rent'
+                  onChange={handleChange}
+                  checked={formData.type === 'rent'}
                 />
                 <label className="font-semibold">Rent</label>
               </div>
@@ -108,6 +187,8 @@ export default function () {
                 <input 
                 type="checkbox"
                 id='offer'
+                checked={formData.offer}
+                onChange={handleChange}
                  />
                 <label className="font-semibold">Offer</label>
               </div>
@@ -115,6 +196,8 @@ export default function () {
                 <input 
                 type="checkbox" 
                 id='furnished'
+                checked={formData.furnished}
+                onChange={handleChange}
                 />
                 <label className="font-semibold">Furnished</label>
               </div>
@@ -122,6 +205,8 @@ export default function () {
                 <input 
                 type="checkbox" 
                 id='parking'
+                checked={formData.parking}
+                onChange={handleChange}
                 />
                 <label className="font-semibold">Parking</label>
               </div>
@@ -130,20 +215,26 @@ export default function () {
             <div className="">
               <input 
                 type="number" 
-                defaultValue={0}
                 className='w-[40px]'
                 id='bedRoom'
                 required
+                value={formData.bedRoom}
+                onChange={handleChange}
+                max={10} 
+                min={0}
               />
               <label className="font-semibold">BadRoom</label>
             </div>
             <div className="">
               <input 
                 type="number"
-                defaultValue={0}
                 className='w-[40px]'
                 id='bathRoom'
                 required
+                value={formData.bathRoom}
+                onChange={handleChange}
+                max={10} 
+                min={0}
                />
               <label className="font-semibold">BathRoom</label>
             </div>
@@ -153,26 +244,31 @@ export default function () {
               <input 
                 className="w-[40px]" 
                 type="number" 
-                defaultValue={0} 
                 max={50000000} 
                 min={0}
                 id='market'
                 required
+                value={formData.market}
+                onChange={handleChange}
                 />
               <label className="font-semibold"> Market</label>
             </div>
-            <div className="">
+            {formData.offer && (
+              <div className="">
               <input 
                 id='discount'
                 className="w-[40px]" 
                 type="number" 
-                defaultValue={0} 
                 max={50000000} 
                 min={0}
                 required
+                value={formData.discount}
+                onChange={handleChange}
                 />
               <label className="font-semibold">Discount</label>
             </div>
+            )}
+            
           </div>
         </div>
 
@@ -210,7 +306,10 @@ export default function () {
               </div>
             ))}
         </div>
-        <button className='p-3 text-white font-semibold w-[500px] bg-slate-600 rounded-lg uppercase hover:opacity-85'>Create List</button>
+        <button disabled={loading || uploadings} className='p-3 text-white font-semibold w-[500px] bg-slate-600 rounded-lg uppercase hover:opacity-85'>
+          {loading ? 'Createing...':'Create List'}
+        </button>
+        {error &&<p className='text-red-500'>{error}</p>}
         </div>
       </form>
     </div>

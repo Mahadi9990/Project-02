@@ -23,7 +23,7 @@ export default function Profile() {
   const {currentUser,error,loading}=useSelector((state)=>state.user)
   const fileRef = useRef(null);
   const [file, setfile] = useState(undefined);
-  const [formData, setformData] = useState({});
+  const [formData, setformData] = useState({ });
   const [uploadError, setuploadError] = useState(false);
   const [filePerc, setfilePerc] = useState(0);
   const dispatch =useDispatch()
@@ -36,7 +36,7 @@ export default function Profile() {
     }
   },[file])
 
-  const handleClickUpload =()=>{
+  const handleClickUpload =(file)=>{
     const storage =getStorage(app)
     const fileName =new Date().getTime() + file.name
     const storageRef=ref(storage,fileName)
@@ -161,8 +161,8 @@ export default function Profile() {
         <Link to='/createList' type="button" className="bg-slate-600 text-center text-white font-semibold p-3 w-full rounded-lg uppercase">Create List</Link>
      </form>
      <div className="flex justify-between items-center">
-      <span onClick={deleteUser} className='text-red-500 font-semibold'>Delete Account</span>
-      <span onClick={singoutUser} className='text-red-500 font-semibold'>Sing Out</span>
+      <span onClick={deleteUser} className='text-red-500 font-semibold cursor-pointer'>Delete Account</span>
+      <span onClick={singoutUser} className='text-red-500 font-semibold cursor-pointer'>Sing Out</span>
      </div>
      <p className="text-red-500 font-semibold text-center">{error ? error :""}</p>
      <p className="text-green-500 font-semibold text-center">{updateSuccess?'User update seccessflly':''}</p>

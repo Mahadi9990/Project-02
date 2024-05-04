@@ -74,3 +74,20 @@ export const listing=async (req,res,next)=>{
     
     
 }
+
+
+export const deleteList=async (req,res,next)=>{
+    const listings =await Listing.findById(req.params.id)
+    if(!listings) next(errorHandeler(202,'Listings is not found'))
+    if(req.user.id !== listings.userRef) next(errorHandeler(201,'You can delete your own listing'))
+        try {
+            await Listing.findByIdAndDelete(req.params.id)
+            res.status(200).json('List delete successfully')
+        } catch (error) {
+            next(error)
+        }
+    
+        
+    
+    
+}

@@ -133,6 +133,22 @@ export default function Profile() {
       setshowListingError(true)
     }
   }
+  const showListItemDelete =async(listId)=>{
+    try {
+      const res =await fetch(`/api/create/deleteList/${listId}`,{
+        method:"delete"
+      })
+      const data =await res.json()
+      if(data.success === false){
+        console.log(data.message)
+      }
+      setuserListings(
+        (prev)=>prev.filter((list)=>list._id !== listId)
+      )
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
   return (
     <div className='w-[500px] mx-auto'>  
      <h1 className='p-3 font-semibold text-3xl text-center'>Profile</h1>
@@ -187,11 +203,15 @@ export default function Profile() {
         </button>
         {userListings && userListings.length > 0 && userListings.map((listings)=>
           <div key={listings._id} className="flex flex-row justify-between gap-2 p-2">
-          <img className="w-[40px] h-[40px] rounded-sm" src={listings.image[0]} alt="" />
-          <p>{listings.title}</p>
+            <Link to={`/listing/${listings._id}`}>
+              <img className="w-[40px] h-[40px] rounded-sm" src={listings.image[0]} alt="" />
+            </Link>
+          <Link to={`/listing/${listings._id}`}>
+            <p className="font-semibold hover:underline">{listings.title}</p>
+          </Link>
           <div className="flex flex-col">
-            <span>Delete</span>
-            <span>Edit</span>
+            <button onClick={()=>showListItemDelete(listings._id)} className="cursor-pointer font-semibold text-red-500 hover:opacity-80">Delete</button>
+            <button className="cursor-pointer font-semibold hover:opacity-80">Edit</button>
           </div>
         </div>
         )}

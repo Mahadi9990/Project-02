@@ -1,7 +1,12 @@
 import {useEffect,useState} from 'react'
 import { useParams } from 'react-router-dom'
+import {Swiper,SwiperSlide} from 'swiper/react'
+import SwiperCore from 'swiper'
+import {Navigation} from 'swiper/modules'
+import 'swiper/css/bundle'
 
 export default function AllListing() {
+    SwiperCore.use([Navigation])
     const params =useParams()
     const [listings, setlistings] = useState(null);
     const [loading, setloading] = useState(false);
@@ -38,7 +43,13 @@ export default function AllListing() {
         ):""}
         {listings && !error && !loading &&(
             <div className="">
-                <img className='w-full h-[400px] object-cover' src={listings.image} alt="" />
+                <Swiper navigation>
+                    {listings.image.map((url)=>(
+                        <SwiperSlide key={url}>
+                            <img className='w-full h-[400px] object-cover' src={url} alt="" />
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
                 <h1 className='text-2xl font-semibold p-3'>{listings.title}</h1>
                 <h3 className='font-semibold p-3'>{listings.address}</h3>
                 <span className='bg-slate-500 rounded-sm px-3 py-2 ms-3 font-semibold text-white'>

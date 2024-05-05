@@ -44,7 +44,7 @@ export default function UpdateList() {
   },[])
 
   const handleImageUpload=(e)=>{
-    if(files.length > 0 && files.length + formData.image.length < 3)
+    if(files.length > 0 && files.length + formData.image.length < 6)
     {
       setuploadings(true)
       setuploading(true)
@@ -66,7 +66,7 @@ export default function UpdateList() {
         setuploadings(false)
       })
     }else{
-      setimageUploadError('You can only upload 2 Image')
+      setimageUploadError('You can only upload 5 Image')
       setuploading(false)
     }
   }

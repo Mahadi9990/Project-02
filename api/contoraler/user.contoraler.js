@@ -86,8 +86,35 @@ export const deleteList=async (req,res,next)=>{
         } catch (error) {
             next(error)
         }
+}
+
+export const getList=async (req,res,next)=>{
+    try {
+        const listing =await Listing.findById(req.params.id)
+        if(!listing) return next(errorHandeler(201,'Listing is not found'))
+        res.status(200).json(listing)
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+export const updateList =async(req,res,next)=>{
     
-        
+     const listings =await Listing.findById(req.params.id)
+    if(!listings) return next(errorHandeler(401,"List is not found"))
+    if(req.user.id !== listings.userRef) return next(errorHandeler(403,"You can update your own list"))
+    try {
+        const userlistUpdate =await Listing.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            {
+             new:true
+            }
+        )
+        res.status(200).json(userlistUpdate)
     
-    
+    } catch (error) {
+       next(error) 
+    }
 }

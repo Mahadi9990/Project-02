@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {getDownloadURL, getStorage, uploadBytesResumable,ref} from 'firebase/storage'
 import {app} from '../firebase'
 import {useSelector} from 'react-redux'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate,useParams} from 'react-router-dom'
 
-export default function () {
+export default function UpdateList() {
+  const params =useParams()
   const navigate =useNavigate()
   const {currentUser} =useSelector((state)=>state.user)
   const [files, setfiles] = useState([]);
@@ -27,6 +28,20 @@ export default function () {
  });
   const [imageUploadError, setimageUploadError] = useState(false);
   const [uploading, setuploading] = useState(false);
+
+  useEffect(()=>{
+    const fetchListing=async() =>{
+      const listingId =params.listId
+      const res=await fetch(`/api/create/get/${listingId}`)
+      const data=await res.json()
+      if(data.success === false){
+        console.log(data.message)
+        return;
+      }
+      setformData(data)
+    }
+    fetchListing()
+  },[])
 
   const handleImageUpload=(e)=>{
     if(files.length > 0 && files.length + formData.image.length < 3)
@@ -106,7 +121,7 @@ export default function () {
       if(formData.market < formData.discount)return seterror('Discount prize need to less then Market prize')
       setloading(true)
       seterror(false)
-      const res =await fetch('/api/create/list',{
+      const res =await fetch(`/api/create/updateList/${params.listId}`,{
         method:"POST",
         headers:{
           'Content-Type':'application/json'
@@ -132,7 +147,7 @@ export default function () {
   }
   return (
     <div>
-      <h1 className='uppercase font-semibold text-center'>Create List</h1>
+      <h1 className='uppercase font-semibold text-center'>Update List</h1>
       <form onSubmit={handleSubmit} className='flex justify-around p-[50px]'>
         <div className="left">
           <div className="flex flex-col gap-3">
@@ -183,8 +198,7 @@ export default function () {
                 />
                 <label className="font-semibold">Rent</label>
               </div>
-              
-                  <div className="flex flex-row gap-2">
+              <div className="flex flex-row gap-2">
                 <input 
                 type="checkbox"
                 id='offer'
@@ -193,8 +207,6 @@ export default function () {
                  />
                 <label className="font-semibold">Offer</label>
               </div>
-                
-
               <div className="flex flex-row gap-2">
                 <input 
                 type="checkbox" 
@@ -310,7 +322,7 @@ export default function () {
             ))}
         </div>
         <button disabled={loading || uploadings} className='p-3 text-white font-semibold w-[500px] bg-slate-600 rounded-lg uppercase hover:opacity-85'>
-          {loading ? 'Createing...':'Create List'}
+          {loading ? 'Updating...':'Update List'}
         </button>
         {error &&<p className='text-red-500'>{error}</p>}
         </div>

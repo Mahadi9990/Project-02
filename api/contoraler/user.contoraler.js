@@ -118,3 +118,15 @@ export const updateList =async(req,res,next)=>{
        next(error) 
     }
 }
+export const loadlor =async(req,res,next)=>{
+    
+   try {
+    const landlor =await User.findById(req.params.id)
+    if(!landlor) return next(errorHandeler(401,"User is not founds"))
+        const {password:pass,...rest}=landlor._doc
+       res.status(200).json(rest)
+   
+   } catch (error) {
+      next(error) 
+   }
+}

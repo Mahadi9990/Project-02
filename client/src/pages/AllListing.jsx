@@ -4,8 +4,12 @@ import {Swiper,SwiperSlide} from 'swiper/react'
 import SwiperCore from 'swiper'
 import {Navigation} from 'swiper/modules'
 import 'swiper/css/bundle'
+import { useSelector } from 'react-redux'
+import Landlor from '../components/Landlor'
 
 export default function AllListing() {
+    const [contact, setcontact] = useState(false);
+    const {currentUser} =useSelector((state)=>state.user)
     SwiperCore.use([Navigation])
     const params =useParams()
     const [listings, setlistings] = useState(null);
@@ -61,6 +65,14 @@ export default function AllListing() {
                     {listings.type === 'sale' && listings.offer && (
                     <span className='bg-red-500 rounded-sm px-3 py-2 ms-3 font-semibold'>{`Discount: ${listings.discount}$`}</span>
                     )}
+                {currentUser && currentUser._id !== listings.userRef && !contact &&(
+                <div className="mx-2">
+                    <button onClick={()=>setcontact(true)} className='hover:opacity-90 text-center w-full mt-5 p-3 rounded-lg bg-slate-500 font-semibold uppercase'>Contact Landlor</button>
+                </div>
+                )}
+                {contact && (
+                    <Landlor listing={listings}/>
+                )}
             </div>
         )}
     </main>

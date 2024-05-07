@@ -39,7 +39,7 @@ export default function Landlor({listing}) {
 
           </textarea>
           <Link 
- to={`mailto:${landlor.email}?subject=Regarding ${listing.title} &body=${message}`}
+            to={`mailto:${landlor.email}?subject=Regarding ${listing.title} &body=${message}`}
           className="text-center hover:opacity-80 w-full bg-green-500 font-semibold p-2 rounded-lg"
           
           >Send message</Link>

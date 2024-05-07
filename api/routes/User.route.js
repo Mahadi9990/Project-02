@@ -1,5 +1,5 @@
 import express from 'express'
-import {update,deleteUser,singOut,list,listing,deleteList,getList,updateList,loadlor} from '../contoraler/user.contoraler.js'
+import {search,update,deleteUser,singOut,list,listing,deleteList,getList,updateList,loadlor} from '../contoraler/user.contoraler.js'
 import { verifyToken } from '../utils/verifyUser.js'
 
 const route =express.Router()
@@ -13,12 +13,7 @@ route.delete('/deleteList/:id',verifyToken,deleteList)
 route.get('/get/:id',getList)
 route.post('/updateList/:id',verifyToken,updateList)
 route.get('/landlor/:id',verifyToken,loadlor)
-
-
-
-
-
-
+route.get('/search',search)
 
 
 

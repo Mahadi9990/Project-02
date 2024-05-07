@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv';
 import userRoute from './routes/User.route.js'
 import authRoute from './routes/auth.route.js'
+
 import cookieParser from 'cookie-parser';
 dotenv.config();
 
@@ -23,6 +24,7 @@ app.listen(3000,()=>{
 app.use("/api/user",authRoute)
 app.use("/api/example",userRoute)
 app.use("/api/create",userRoute)
+
 
 
 app.use((err,req,res,next)=>{

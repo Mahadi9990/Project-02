@@ -9,6 +9,7 @@ import PrivateRoute from './components/PrivateRoute';
 import List from './pages/List';
 import UpdateList from './pages/UpdateList';
 import AllListing from './pages/AllListing';
+import Search from './pages/Search';
 export default function App() {
   return (
     <BrowserRouter>
@@ -24,6 +25,8 @@ export default function App() {
       <Route path="/listing/:listingId" element={<AllListing/>}/>
       <Route path="/sing-in" element={<Singin/>}/>
       <Route path="/sing-up" element={<Singup/>}/>
+      <Route path="/search" element={<Search/>}/>
+
     </Routes>
     </BrowserRouter>
   )

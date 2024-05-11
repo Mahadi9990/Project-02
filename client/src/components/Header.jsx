@@ -23,10 +23,12 @@ export default function Header() {
   return (
     <header>
         <div className="flex justify-between p-5">
+        <Link to={'/'}>
         <h1>
             <span>Real</span>
             <span className='text-red-500 font-semibold'>State</span>
         </h1>
+        </Link>
         <form onSubmit={handleSubmit} action="" className='flex items-center gap-1 bg-slate-100 border rounded-lg'>
             <input 
               type="text" 

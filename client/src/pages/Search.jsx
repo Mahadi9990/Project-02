@@ -201,7 +201,7 @@ export default function Search() {
                 <button className='bg-slate-500 hover:opacity-80 p-3 rounded-lg w-full text-white font-semibold uppercase'>Search</button>
             </form>
             <div className="">
-                <h1 className='font-semibold text-3xl'>List is Here</h1>
+                <h1 className='font-semibold text-3xl text-center'>List is Here</h1>
                 <div className="flex flex-row gap-x-5 gap-y-9 flex-wrap">
                     {!loading && allListing && allListing.map((listing)=>
                         <Listing key={listing._id} listing={listing}/>

@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import Listing from './Listing';
 
 export default function Search() {
+    const [showMore, setshowMore] = useState(false);
     const navigate =useNavigate()
     const [error, seterror] = useState(false);
     const [loading, setloading] = useState(false);
     const [allListing, setallListing] = useState([]);
- console.log(allListing)
     const [searchBarData, setsearchBarData] = useState({
         searchTerm:"",
         type:"all",
@@ -72,6 +72,7 @@ export default function Search() {
         const fetchListing =async()=>{
             const searchQuery =urlParams.toString()
             setloading(true)
+            setshowMore(false)
             const res =await fetch(`/api/create/search?${searchQuery}`)
             const data =await res.json()
             if(data.success === false){
@@ -79,13 +80,30 @@ export default function Search() {
                 setloading(false)
                 return;
             }
+            if(data.length > 8){
+                setshowMore(true)
+            }else{
+                setshowMore(false)
+            }
             setallListing(data);
             setloading(false)
             seterror(false)
         }
         fetchListing()
     },[location.search])
-
+    const showMoreClick =async()=>{
+        const numberOfListing =allListing.length;
+        const startIndex =numberOfListing;
+        const urlParams =new URLSearchParams(location.search)
+        urlParams.set('startIndex',startIndex)
+        const searchQuery=urlParams.toString()
+        const res =await fetch(`/api/create/search?${searchQuery}`)
+        const data =await res.json()
+        if(data.length < 9){
+            setshowMore(false)
+        }
+        setallListing([...allListing,...data])
+    }
   return (
     <div>
         <div className="flex flex-row justify-evenly ">
@@ -189,7 +207,12 @@ export default function Search() {
                         <Listing key={listing._id} listing={listing}/>
                     )}
                 </div>
-                
+                {showMore &&(
+                    <button 
+                    className='hover:underline font-semibold text-green-500'
+                    onClick={showMoreClick}
+                    >Show More</button>
+                )}
             </div>
         </div>
     </div>

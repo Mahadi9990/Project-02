@@ -9,15 +9,15 @@ export default function Header() {
   const handleSubmit =(e)=>{
     e.preventDefault()
     const urlParams =new URLSearchParams(window.location.search);
-    urlParams.set('searchTerms',searchTerm)
+    urlParams.set('searchTerm',searchTerm)
     const searchQuery =urlParams.toString()
     navigate(`/search?${searchQuery}`)
   }
  useEffect(()=>{
   const urlParams =new URLSearchParams(location.search)
-  const searchUrlParams=urlParams.get('searchTerms')
-  if(searchUrlParams){
-    setsearchTerm(searchUrlParams)
+  const searchUrlParam=urlParams.get('searchTerm')
+  if(searchUrlParam){
+    setsearchTerm(searchUrlParam)
   }
  },[location.search])
   return (

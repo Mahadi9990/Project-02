@@ -69,7 +69,10 @@ export default function Home() {
     
       {/* Listing for sale rent offer */}
         <div className="my-3">
+        <Link to={`/search?offer=true`}>
           <h1 className='font-semibold text-blue-500 pt-3 text-center'>Recent Offer</h1>
+         </Link>
+
           <div className="gap-3 flex flex-row justify-evenly pt-3">
 
           {offerList && offerList.length > 0 && offerList.map((items)=>(
@@ -80,7 +83,10 @@ export default function Home() {
           </div>
         </div>
         <div className="my-3">
-          <h1 className='font-semibold text-blue-500 pt-3 text-center'>Recent Sale list</h1>
+          <Link to={`/search?type=sale`}>
+            <h1 className='font-semibold text-blue-500 pt-3 text-center'>Recent Sale list</h1>
+          </Link>
+
           <div className="gap-3 flex flex-row justify-evenly pt-3">
 
           {saleList && saleList.length > 0 && saleList.map((items)=>(
@@ -91,7 +97,9 @@ export default function Home() {
           </div>
         </div>
         <div className="my-3">
-          <h1 className='font-semibold text-blue-500 pt-3 text-center'>Recent Rent List</h1>
+          <Link to={`/search?type=rent`}>
+            <h1 className='font-semibold text-blue-500 pt-3 text-center'>Recent Rent List</h1>
+          </Link>
           <div className="gap-3 flex flex-row justify-evenly pt-3">
 
           {rentList && rentList.length > 0 && rentList.map((items)=>(
